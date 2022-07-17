@@ -132,6 +132,21 @@
     <script src="dist/js/pages/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="dist/js/demo.js"></script>
+
+    <!-- Jquery required checkbox -->
+    <script>
+        $(function(){
+            var requiredCheckboxes = $('.options :checkbox[required]');
+            requiredCheckboxes.change(function(){
+                if(requiredCheckboxes.is(':checked')) {
+                    requiredCheckboxes.removeAttr('required');
+                } else {
+                    requiredCheckboxes.attr('required', 'required');
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
 
