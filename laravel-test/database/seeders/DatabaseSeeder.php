@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
 //        Classes::factory(10)->create();
 //        Subject::factory(10)->create();
 //        Student::factory(20)->create();
-        Scores::factory(20)->create();
+//        Scores::factory(20)->create();
 //        Student_Subjects::factory(20)->create();
     }
 }
