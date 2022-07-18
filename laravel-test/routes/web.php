@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebController;
+use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,8 +34,8 @@ Route::get('/score-create', [WebController::class, 'scoreCreate']);
 Route::get('/score-edit', [WebController::class, 'scoreEdit']);
 
 //routing tables
-Route::get('/classes-list', [WebController::class, 'listClasses']);
-Route::get('/students-list', [WebController::class, 'listStudents']);
+Route::get('/classes-list', [ClassesController::class, 'listClasses']);
+Route::get('/students-list', [StudentController::class, 'listStudents']);
 Route::get('/subjects-list', [WebController::class, 'listSubject']);
 Route::get('/scores-list', [WebController::class, 'listScores']);
 

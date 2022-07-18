@@ -623,45 +623,31 @@
                             <th>Student Name</th>
                             <th>Birthday</th>
                             <th>Class ID</th>
+                            <th>created_at</th>
+                            <th>updated_at</th>
                             <th>Action</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>183</td>
-                            <td>Shoes</td>
-                            <td>100$</td>
-                            <td>noun</td>
-                            <td><a href="/student-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                            <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                        </tr>
-                        <tr>
-                            <td>219</td>
-                            <td>Shirt</td>
-                            <td>80$</td>
-                            <td>noun</td>
-                            <td><a href="/student-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                            <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                        </tr>
-                        <tr>
-                            <td>657</td>
-                            <td>Beef</td>
-                            <td>50$</td>
-                            <td>noun</td>
-                            <td><a href="/student-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                            <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                        </tr>
-                        <tr>
-                            <td>175</td>
-                            <td>Beer</td>
-                            <td>10$</td>
-                            <td>noun</td>
-                            <td><a href="/student-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                            <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                        </tr>
+                            @foreach($students as $item)
+                                <tr>
+                                    <td>{{$item->studentID}}</td>
+                                    <td>{{$item->studentName}}</td>
+                                    <td>{{$item->birthday}}</td>
+                                    <td>{{$item->classID}}</td>
+                                    <td>{{$item->created_at}}</td>
+                                    <td>{{$item->updated_at}}</td>
+                                    <td><a href="/student-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
+                                    <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
+
+                    <!-- phân trang -->
+                    {!! $students->links() !!}
+
                 </div>
                 <!-- /.card-body -->
             </div>

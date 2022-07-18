@@ -622,41 +622,30 @@
                                 <th>Class ID</th>
                                 <th>Class Name</th>
                                 <th>Class Room</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
                                 <th>Action</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>C183</td>
-                                <td>John Doe</td>
-                                <td>CR107</td>
-                                <td><a href="/classes-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                                <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                            </tr>
-                            <tr>
-                                <td>C219</td>
-                                <td>Alexander Pierce</td>
-                                <td>CR108</td>
-                                <td><a href="/classes-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                                <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                            </tr>
-                            <tr>
-                                <td>C657</td>
-                                <td>Bob Doe</td>
-                                <td>CR109</td>
-                                <td><a href="/classes-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                                <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                            </tr>
-                            <tr>
-                                <td>C175</td>
-                                <td>Mike Doe</td>
-                                <td>CR101</td>
-                                <td><a href="/classes-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                                <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                            </tr>
+                            @foreach($classes as $item)
+                                <tr>
+                                    <td>{{$item->classID}}</td> <!-- tuong duong php echo $item->classID-->
+                                    <td>{{$item->className}}</td>
+                                    <td>{{$item->classRoom}}</td>
+                                    <td>{{$item->created_at}}</td>
+                                    <td>{{$item->updated_at}}</td>
+                                    <td><a href="/classes-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
+                                    <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
+
+                    <!-- phân trang -->
+                    {!! $classes->links() !!}
+
                 </div>
                 <!-- /.card-body -->
             </div>

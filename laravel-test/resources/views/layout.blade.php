@@ -30,7 +30,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!--xử lí lỗi link dẫn 1 nguồn.-->
+    <base href="/"/>
+
+    <!--title-->
     <title>@yield('title')</title>
+
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->

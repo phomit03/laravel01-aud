@@ -45,13 +45,6 @@ class WebController extends Controller
     }
 
     //table
-    public function listClasses(){
-        return view('pages.tables.listClasses');
-    }
-
-    public function listStudents(){
-        return view('pages.tables.listStudents');
-    }
 
     public function listSubject(){
         return view('pages.tables.listSubjects');
