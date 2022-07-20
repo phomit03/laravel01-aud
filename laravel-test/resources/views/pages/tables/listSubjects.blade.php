@@ -589,10 +589,7 @@
             <h1>Subjects List</h1>
         </div>
         <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                <li class="breadcrumb-item active">Subjects List</li>
-            </ol>
+            <a href="/subject-create"><button type="button" class="btn btn-primary float-right">+ Add Subject</button></a>
         </div>
     </div>
 @endsection
@@ -602,56 +599,50 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Subjects List</h3>
+                    <form method="get" action="{{url('/subjects-list')}}">
+                        <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 450px;">
+                                <input type="text" name="subjectName" value="{{app('request')->input('subjectName')}}"
+                                       class="form-control float-right" placeholder="Search Name Subject">
 
-                    <div class="card-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
-                        <tr>
-                            <th>Subject ID</th>
-                            <th>Subject Name</th>
-                            <th>Action</th>
-                            <th>Action</th>
-                        </tr>
+                            <tr>
+                                <th>Subject ID</th>
+                                <th>Subject Name</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Action</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>183</td>
-                            <td>Shoes</td>
-                            <td><a href="/subject-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                            <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                        </tr>
-                        <tr>
-                            <td>219</td>
-                            <td>Shirt</td>
-                            <td><a href="/subject-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                            <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                        </tr>
-                        <tr>
-                            <td>657</td>
-                            <td>Beef</td>
-                            <td><a href="/subject-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                            <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                        </tr>
-                        <tr>
-                            <td>175</td>
-                            <td>Beer</td>
-                            <td><a href="/subject-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                            <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                        </tr>
+                            @foreach($subject as $item)
+                                <tr>
+                                    <td>{{$item->subjectID}}</td>
+                                    <td>{{$item->subjectName}}</td>
+                                    <td>{{$item->created_at}}</td>
+                                    <td>{{$item->updated_at}}</td>
+                                    <td><a href="/subject-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
+                                    <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
+
+                    <!--phan trang-->
+                    {!! $subject->appends(app('request')->input())->links() !!}
+                    <!-- links(): get ra html, appends(): để chuyển trang vẫn không bị render dữ liệu -->
+
                 </div>
                 <!-- /.card-body -->
             </div>

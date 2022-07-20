@@ -589,10 +589,7 @@
             <h1>Students List</h1>
         </div>
         <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                <li class="breadcrumb-item active">Students List</li>
-            </ol>
+            <a href="/student-create"><button type="button" class="btn btn-primary float-right">+ Add Student</button></a>
         </div>
     </div>
 @endsection
@@ -602,17 +599,30 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Students List</h3>
+                    <form method="get" action="{{url('/students-list')}}">
+                        <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 650px;">
+                                <select name="classID" class="form-control float-left">
+                                    <option value="">Select Class</option>
+                                    @foreach($classesList as $items)
+                                        <!--giữ dữ liệu người dùng nhập vào ở input hoặc selecte (no render)-->
+                                        <option @if(app('request')->input('classID') == $items->classID) selected @endif value="{{$items->classID}}">
+                                            {{$items->className}}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                    <div class="card-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                                <input type="date" value="{{app('request')->input('birth_start')}}" name="birth_start" class="form-control float-left"/>
+                                <input type="date" value="{{app('request')->input('birth_end')}}" name="birth_end" class="form-control float-left"/>
 
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                <input type="text" value="{{app('request')->input('name')}}" name="name" class="form-control float-left" placeholder="Search Name Student">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
+
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -622,7 +632,7 @@
                             <th>Student ID</th>
                             <th>Student Name</th>
                             <th>Birthday</th>
-                            <th>Class ID</th>
+                            <th>Class Name</th>
                             <th>created_at</th>
                             <th>updated_at</th>
                             <th>Action</th>
@@ -630,12 +640,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                            @foreach($students as $item)
+                            @foreach($student as $item)
                                 <tr>
                                     <td>{{$item->studentID}}</td>
                                     <td>{{$item->studentName}}</td>
                                     <td>{{$item->birthday}}</td>
-                                    <td>{{$item->classID}}</td>
+                                    <td>{{$item->getClasses->className}}</td>   <!-- object getClasses->className để hiển thị-->
                                     <td>{{$item->created_at}}</td>
                                     <td>{{$item->updated_at}}</td>
                                     <td><a href="/student-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
@@ -646,7 +656,8 @@
                     </table>
 
                     <!-- phân trang -->
-                    {!! $students->links() !!}
+                    {!! $student->appends(app('request')->input())->links() !!}
+                    <!-- links(): get ra html, appends(): để chuyển trang vẫn không bị render dữ liệu -->
 
                 </div>
                 <!-- /.card-body -->

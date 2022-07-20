@@ -589,10 +589,7 @@
             <h1>Classes List</h1>
         </div>
         <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                <li class="breadcrumb-item active">Classes List</li>
-            </ol>
+            <a href="/classes-create"><button type="button" class="btn btn-primary float-right">+ Add Class</button></a>
         </div>
     </div>
 @endsection
@@ -602,17 +599,20 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Classes List</h3>
+                    <form method="get" action="{{url('/classes-list')}}">
+                        @csrf
 
-                    <div class="card-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                        <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 450px;">
+                                <input type="text" name="className" value="{{app('request')->input('className')}}"
+                                       class="form-control float-right" placeholder="Search Name Class">
 
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -622,6 +622,7 @@
                                 <th>Class ID</th>
                                 <th>Class Name</th>
                                 <th>Class Room</th>
+                                <th>Student Number</th> <!-- tao them 1 column bang cach get data tu 1 object khac (neu co khoa ngoai)-->
                                 <th>Created At</th>
                                 <th>Updated At</th>
                                 <th>Action</th>
@@ -634,6 +635,20 @@
                                     <td>{{$item->classID}}</td> <!-- tuong duong php echo $item->classID-->
                                     <td>{{$item->className}}</td>
                                     <td>{{$item->classRoom}}</td>
+                                    {{--<td>
+                                        //in ra cac id (array)
+                                        @foreach($item->getStudents as $student)
+                                            {{$student->studentID}}
+                                        @endforeach
+                                    </td>--}}
+
+                                    {{--<td>
+                                        //Nếu dùng with thì items sẽ ở dạng array, do đó phải chuyển qua obj
+                                        {{$item->getStudents->count()}}
+                                        -
+                                        {{count($item->getStudents->toArray())}}
+                                    </td>--}}
+                                    <td>{{$item->get_students_count}}</td>  <!-- withCount se sinh ra get_students_count-->
                                     <td>{{$item->created_at}}</td>
                                     <td>{{$item->updated_at}}</td>
                                     <td><a href="/classes-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
@@ -644,7 +659,8 @@
                     </table>
 
                     <!-- phân trang -->
-                    {!! $classes->links() !!}
+                    {!! $classes->appends(app('request')->input())->links() !!}
+                    <!-- links(): get ra html, appends(): để chuyển trang vẫn không bị render dữ liệu -->
 
                 </div>
                 <!-- /.card-body -->

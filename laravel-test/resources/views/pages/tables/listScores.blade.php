@@ -589,10 +589,7 @@
             <h1>Scores List</h1>
         </div>
         <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                <li class="breadcrumb-item active">Scores List</li>
-            </ol>
+            <a href="/score-create"><button type="button" class="btn btn-primary float-right">+ Add Score</button></a>
         </div>
     </div>
 @endsection
@@ -602,17 +599,39 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Scores List</h3>
+                    <form method="get" action="{{url('/scores-list')}}">
+                        <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 650px;">
+                                <select name="studentID" class="form-control float-left">
+                                    <option value="">Select Student</option>
+                                    @foreach($studentsList as $items)
+                                        <!--giữ dữ liệu người dùng nhập vào ở input hoặc selecte (no render)-->
+                                        <option @if(app('request')->input('studentID') == $items->studentID) selected @endif
+                                        value="{{$items->studentID}}">
+                                            {{$items->studentName}}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                    <div class="card-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                                <select name="subjectID" class="form-control float-left">
+                                    <option value="">Select Subject</option>
+                                    @foreach($subjectsList as $items)
+                                        <!--giữ dữ liệu người dùng nhập vào ở input hoặc selecte (no render)-->
+                                        <option @if(app('request')->input('subjectID') == $items->subjectID) selected @endif
+                                        value="{{$items->subjectID}}">
+                                            {{$items->subjectName}}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                <input type="text" value="{{app('request')->input('result')}}" name="result" class="form-control float-right" placeholder="Search">
+
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
@@ -622,51 +641,35 @@
                                 <th>Score ID</th>
                                 <th>Score</th>
                                 <th>Result</th>
-                                <th>Student ID</th>
-                                <th>Subject ID</th>
+                                <th>Student Name</th>
+                                <th>Subject Name</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
                                 <th>Action</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>183</td>
-                                <td>Shoes</td>
-                                <td>100$</td>
-                                <td>noun</td>
-                                <td>S101</td>
-                                <td><a href="/score-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                                <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                            </tr>
-                            <tr>
-                                <td>219</td>
-                                <td>Shirt</td>
-                                <td>80$</td>
-                                <td>ST102</td>
-                                <td>SJ102</td>
-                                <td><a href="/score-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                                <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                            </tr>
-                            <tr>
-                                <td>657</td>
-                                <td>Beef</td>
-                                <td>50$</td>
-                                <td>noun</td>
-                                <td>Bacon</td>
-                                <td><a href="/score-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                                <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                            </tr>
-                            <tr>
-                                <td>175</td>
-                                <td>Beer</td>
-                                <td>10$</td>
-                                <td>noun</td>
-                                <td>Bacon</td>
-                                <td><a href="/score-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                                <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
-                            </tr>
+                            @foreach($scores as $item)
+                                <tr>
+                                    <td>{{$item->scoreID}}</td>
+                                    <td>{{$item->score.'+'}}</td>
+                                    <td>{{$item->result}}</td>
+                                    <td>{{$item->getStudents->studentName}}</td>
+                                    <td>{{$item->getSubjects->subjectName}}</td>
+                                    <td>{{$item->created_at}}</td>
+                                    <td>{{$item->updated_at}}</td>
+                                    <td><a href="/score-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
+                                    <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
+
+                    <!--phan trang-->
+                    {!! $scores->appends(app('request')->input())->links() !!}
+                    <!-- links(): get ra html, appends(): để chuyển trang vẫn không bị render dữ liệu -->
+
                 </div>
                 <!-- /.card-body -->
             </div>

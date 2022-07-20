@@ -604,19 +604,23 @@
             <!-- general form elements -->
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Create</h3>
+                    <h3 class="card-title">
+                        Create
+                    </h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form role="form">
+                <form role="form" method="post" action="{{url('/student-create')}}">
+                    @csrf   <!--sinh ra 1 key token co thoi han nhat dinh, tranh bi tan cong may chu (bat buoc cho: POST, PUT, DELETE)-->
+                    @method("post")
                     <div class="card-body">
                         <div class="form-group">
                             <label>Student ID <span style="color: red">*</span></label>
-                            <input type="text" class="form-control" placeholder="Input Student ID..." required>
+                            <input type="text" name="studentID" class="form-control" placeholder="Input Student ID..." required>
                         </div>
                         <div class="form-group">
                             <label>Student Name <span style="color: red">*</span></label>
-                            <input type="text" class="form-control" placeholder="Input Student Name..." required>
+                            <input type="text" name="studentName" class="form-control" placeholder="Input Student Name..." required>
                         </div>
                         <!-- Date dd/mm/yyyy -->
                         <div class="form-group">
@@ -625,20 +629,17 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
-                                <input type="text" class="form-control" placeholder="YYYY-MM-DD"
-                                       pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))">
+                                <input type="date" name="birthday" class="form-control" required>
                             </div>
                         </div>
                         <!-- combobox -->
                         <div class="form-group">
                             <label>Class ID <span style="color: red">*</span></label>
-                            <select class="custom-select" required>
+                            <select name="classID" class="custom-select" required>
                                 <option value="">choose</option>
-                                <option value="option 1">option 1</option>
-                                <option value="option 2">option 2</option>
-                                <option value="option 3">option 3</option>
-                                <option value="option 4">option 4</option>
-                                <option value="option 5">option 5</option>
+                                @foreach($classesList as $items)
+                                    <option value="{{$items->classID}}">{{$items->className}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group mb-0">
@@ -651,7 +652,8 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer col-md-12 text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary float-left">Submit</button>
+                        <a href="/students-list"><button type="button" class="btn btn-info float-right">Back List</button></a>
                     </div>
                 </form>
             </div>
