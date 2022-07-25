@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class ClassesController extends Controller
 {
+    private $_GRID_URL = "/admin/classes-list";
+
     public function listClasses(Request $request){
 /*
         //$classes = Classes::all();    //lấy tất cả select * from
@@ -48,6 +50,11 @@ class ClassesController extends Controller
     }
 
     public function classesCreate(Request $request){
+        //validate phía backend (có thể validate string|unique:student)
+        $request->validate([
+            'classID'=>'required|string|unique:classes',
+//            'image'=>'image|mines:jpeg,png,jpg,gif' //validate backend
+        ]);
         Classes::create(
             [
                 'classID'=>$request->get('classID'),    //name input
@@ -55,8 +62,35 @@ class ClassesController extends Controller
                 'classRoom'=>$request->get('classRoom'),
             ]
         );
-        return redirect()->to('/classes-list'); //dieu huong ve list
+        return redirect()->to($this->_GRID_URL); //dieu huong ve list
     }
 
+    public function classesEdit($id){
+        $classes = Classes::find($id); //1 obj Student with id
 
+//        dd($classes);
+
+        return view('pages.forms.classes-forms.classes-edit', [
+            'classes'=>$classes,
+        ]);
+    }
+
+    public function classesUpdate(Request $request, Classes $classes){
+        $classes->update(
+            [
+                'className'=>$request->get('className'),    //name input
+                'classRoom'=>$request->get('classRoom')
+            ]
+        );
+        return redirect()->to($this->_GRID_URL)->with("success", "Update classes successfully");    //điều hướng về list->alert
+    }
+
+    public function classesDelete(Classes $classes){
+        try {
+            $classes->delete(); //xoá cứng, thẳng vào database
+            return redirect()->to($this->_GRID_URL)->with("success", "Delete classes successfully");    //điều hướng về list->alert
+        } catch (\Exception $e){
+            return redirect()->to($this->_GRID_URL)->with("error", "Delete Failed");
+        }
+    }
 }

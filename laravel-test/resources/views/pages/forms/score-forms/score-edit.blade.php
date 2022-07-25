@@ -197,25 +197,25 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/classes-create" class="nav-link">
+                        <a href="admin/classes-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Classes</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/student-create" class="nav-link">
+                        <a href="admin/student-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Student</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/subject-create" class="nav-link">
+                        <a href="admin/subject-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Subject</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/score-create" class="nav-link active">
+                        <a href="admin/score-create" class="nav-link active">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Score</p>
                         </a>
@@ -256,25 +256,25 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/classes-list" class="nav-link">
+                        <a href="admin/classes-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Classes List</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/students-list" class="nav-link">
+                        <a href="admin/students-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Students List</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/subjects-list" class="nav-link">
+                        <a href="admin/subjects-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Subjects List</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/scores-list" class="nav-link">
+                        <a href="admin/scores-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Scores List</p>
                         </a>
@@ -608,42 +608,50 @@
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form role="form">
+                <form role="form" method="post" action="{{url('admin/score-edit', ['score:scoreID' => $score->scoreID])}}">
+                    <!-- 'score:scoreID'=>timID: tham so tu route-->
+                    @csrf
+                    @method("put")
                     <div class="card-body">
                         <div class="form-group">
                             <label>Score ID</label>
-                            <input type="text" class="form-control" placeholder="Output Score ID..." disabled>
+                            <input name="scoreID" value="{{$score->scoreID}}" type="text" class="form-control" placeholder="Output Score ID..." disabled>
                         </div>
                         <div class="form-group">
                             <label>Score <span style="color: red">*</span></label>
-                            <input type="text" class="form-control" placeholder="Output Score..." required>
+                            <input name="score" value="{{$score->score}}" type="text" class="form-control" placeholder="Output Score..." required>
+
+                            {{--thông báo error: validate backend--}}
+                            @error('score')
+                                <p class="text-danger">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label>Result <span style="color: red">*</span></label>
-                            <input type="text" class="form-control" placeholder="Output Result..." required>
+                            <input name="result" value="{{$score->result}}" type="text" class="form-control" placeholder="Output Result..." required>
                         </div>
                         <!-- combobox -->
                         <div class="form-group">
                             <label>Student ID <span style="color: red">*</span></label>
-                            <select class="custom-select" required>
+                            <select name="studentID" class="custom-select" required>
                                 <option value="">choose</option>
-                                <option value="option 1">option 1</option>
-                                <option value="option 2">option 2</option>
-                                <option value="option 3">option 3</option>
-                                <option value="option 4">option 4</option>
-                                <option value="option 5">option 5</option>
+                                @foreach($studentsList as $item)
+                                    <option value="{{$item->studentID}}" @if($score->studentID == $item->studentID) selected @endif>
+                                        {{$item->studentName}}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <!-- combobox -->
                         <div class="form-group">
                             <label>Subject ID <span style="color: red">*</span></label>
-                            <select class="custom-select" required>
+                            <select name="subjectID" class="custom-select" required>
                                 <option value="">choose</option>
-                                <option value="option 1">option 1</option>
-                                <option value="option 2">option 2</option>
-                                <option value="option 3">option 3</option>
-                                <option value="option 4">option 4</option>
-                                <option value="option 5">option 5</option>
+                                @foreach($subjectsList as $item)
+                                    <option value="{{$item->subjectID}}" @if($score->subjectID == $item->subjectID) selected @endif>
+                                        {{$item->subjectName}}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group mb-0">
@@ -657,7 +665,7 @@
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <a href="/scores-list"><button type="button" class="btn btn-info float-right">Back List</button></a>
+                        <a href="admin/scores-list"><button type="button" class="btn btn-info float-right">Back List</button></a>
                     </div>
                 </form>
             </div>

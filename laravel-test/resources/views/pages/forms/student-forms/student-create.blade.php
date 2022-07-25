@@ -197,25 +197,25 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/classes-create" class="nav-link">
+                        <a href="admin/classes-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Classes</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/student-create" class="nav-link active">
+                        <a href="admin/student-create" class="nav-link active">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Student</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/subject-create" class="nav-link">
+                        <a href="admin/subject-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Subject</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/score-create" class="nav-link">
+                        <a href="admin/score-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Score</p>
                         </a>
@@ -256,25 +256,25 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/classes-list" class="nav-link">
+                        <a href="admin/classes-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Classes List</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/students-list" class="nav-link">
+                        <a href="admin/students-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Students List</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/subjects-list" class="nav-link">
+                        <a href="admin/subjects-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Subjects List</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/scores-list" class="nav-link">
+                        <a href="admin/scores-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Scores List</p>
                         </a>
@@ -609,18 +609,25 @@
                     </h3>
                 </div>
                 <!-- /.card-header -->
+
                 <!-- form start -->
-                <form role="form" method="post" action="{{url('/student-create')}}">
+                <form role="form" method="post" action="{{url('admin/student-create')}}" enctype="multipart/form-data"> {{--enctype: cho phep uploads file--}}
                     @csrf   <!--sinh ra 1 key token co thoi han nhat dinh, tranh bi tan cong may chu (bat buoc cho: POST, PUT, DELETE)-->
                     @method("post")
                     <div class="card-body">
                         <div class="form-group">
                             <label>Student ID <span style="color: red">*</span></label>
-                            <input type="text" name="studentID" class="form-control" placeholder="Input Student ID..." required>
+                            {{--value="{{old('studentID')}}": giữ nguyên giá trị ban đầu nếu add bị lỗi, thì không render--}}
+                            <input type="text" value="{{old('studentID')}}" name="studentID" class="form-control" placeholder="Input Student ID..." required>
+
+                            {{--thông báo error: validate backend--}}
+                            @error('studentID')
+                                <p class="text-danger">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label>Student Name <span style="color: red">*</span></label>
-                            <input type="text" name="studentName" class="form-control" placeholder="Input Student Name..." required>
+                            <input type="text" value="{{old('studentName')}}" name="studentName" class="form-control" placeholder="Input Student Name..." required>
                         </div>
                         <!-- Date dd/mm/yyyy -->
                         <div class="form-group">
@@ -629,7 +636,14 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
-                                <input type="date" name="birthday" class="form-control" required>
+                                <input value="{{old('birthday')}}" type="date" name="birthday" class="form-control" required>
+                            </div>
+                        </div>
+                        <!--uploads file-->
+                        <div class="form-group">
+                            <label class="exampleInputFile">File Image</label>
+                            <div>
+                                <input type="file" name="image" accept="image/png, image/gif, image/jpeg">
                             </div>
                         </div>
                         <!-- combobox -->
@@ -638,7 +652,9 @@
                             <select name="classID" class="custom-select" required>
                                 <option value="">choose</option>
                                 @foreach($classesList as $items)
-                                    <option value="{{$items->classID}}">{{$items->className}}</option>
+                                    <option @if(old('classID') == $items->classID) selected @endif value="{{$items->classID}}">
+                                        {{$items->className}}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -653,7 +669,7 @@
 
                     <div class="card-footer col-md-12 text-center">
                         <button type="submit" class="btn btn-primary float-left">Submit</button>
-                        <a href="/students-list"><button type="button" class="btn btn-info float-right">Back List</button></a>
+                        <a href="admin/students-list"><button type="button" class="btn btn-info float-right">Back List</button></a>
                     </div>
                 </form>
             </div>

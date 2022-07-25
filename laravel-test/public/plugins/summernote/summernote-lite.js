@@ -1,14 +1,14 @@
 /*!
- * 
+ *
  * Super simple wysiwyg editor v0.8.16
  * https://summernote.org
- * 
- * 
+ *
+ *
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license.
- * 
+ *
  * Date: 2020-02-19T09:12Z
- * 
+ *
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -5874,7 +5874,7 @@ function () {
 
         _this3.afterCommand();
       }).fail(function (e) {
-        _this3.context.triggerEvent('image.upload.error', e);
+        _this3.context.triggerEvent('image.uploads.error', e);
       });
     }
     /**
@@ -5891,12 +5891,12 @@ function () {
         var filename = file.name;
 
         if (_this4.options.maximumImageFileSize && _this4.options.maximumImageFileSize < file.size) {
-          _this4.context.triggerEvent('image.upload.error', _this4.lang.image.maximumFileSizeError);
+          _this4.context.triggerEvent('image.uploads.error', _this4.lang.image.maximumFileSizeError);
         } else {
           readFileAsDataURL(file).then(function (dataURL) {
             return _this4.insertImage(dataURL, filename);
           }).fail(function () {
-            _this4.context.triggerEvent('image.upload.error');
+            _this4.context.triggerEvent('image.uploads.error');
           });
         }
       });
@@ -5912,7 +5912,7 @@ function () {
       var callbacks = this.options.callbacks; // If onImageUpload set,
 
       if (callbacks.onImageUpload) {
-        this.context.triggerEvent('image.upload', files); // else insert Image as dataURL
+        this.context.triggerEvent('image.uploads', files); // else insert Image as dataURL
       } else {
         this.insertImagesAsDataURL(files);
       }

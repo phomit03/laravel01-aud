@@ -197,25 +197,25 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/classes-create" class="nav-link">
+                        <a href="admin/classes-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Classes</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/student-create" class="nav-link">
+                        <a href="admin/student-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Student</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/subject-create" class="nav-link">
+                        <a href="admin/subject-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Subject</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/score-create" class="nav-link">
+                        <a href="admin/score-create" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Score</p>
                         </a>
@@ -256,25 +256,25 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="/classes-list" class="nav-link">
+                        <a href="admin/classes-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Classes List</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/students-list" class="nav-link">
+                        <a href="admin/students-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Students List</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/subjects-list" class="nav-link">
+                        <a href="admin/subjects-list" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Subjects List</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/scores-list" class="nav-link active">
+                        <a href="admin/scores-list" class="nav-link active">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Scores List</p>
                         </a>
@@ -589,7 +589,7 @@
             <h1>Scores List</h1>
         </div>
         <div class="col-sm-6">
-            <a href="/score-create"><button type="button" class="btn btn-primary float-right">+ Add Score</button></a>
+            <a href="admin/score-create"><button type="button" class="btn btn-primary float-right">+ Add Score</button></a>
         </div>
     </div>
 @endsection
@@ -599,9 +599,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <form method="get" action="{{url('/scores-list')}}">
+                    <form method="get" action="{{url('admin/scores-list')}}">
                         <div class="card-tools">
                             <div class="input-group input-group-sm" style="width: 650px;">
+                                <!--search and filter-->
                                 <select name="studentID" class="form-control float-left">
                                     <option value="">Select Student</option>
                                     @foreach($studentsList as $items)
@@ -659,8 +660,22 @@
                                     <td>{{$item->getSubjects->subjectName}}</td>
                                     <td>{{$item->created_at}}</td>
                                     <td>{{$item->updated_at}}</td>
-                                    <td><a href="/score-edit"><button type="button" class="btn btn-info">Edit</button></a></td>
-                                    <td><a><button type="button" class="btn btn-danger">Delete</button></a></td>
+                                    <td>
+                                        <a href="{{url('admin/score-edit', ['id' => $item->scoreID])}}">   <!--truyen vao scoreID cho id theo kiểu mảng-->
+                                            <button type="submit" class="btn btn-info">Edit</button>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            <form method="post" action="{{url('admin/score-delete' , ['score'=>$item->scoreID])}}">
+                                                @csrf
+                                                @method("delete")
+                                                <button type="submit" onclick="return confirm('You want delete score {{$item->scoreID}}')" class="btn btn-danger">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

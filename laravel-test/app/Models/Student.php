@@ -17,6 +17,7 @@ class Student extends Model
         'studentID',    //do key: string -> add ID vào fillable để post dữ liệu từ input
         'studentName',
         'birthday',
+        'image',
         'classID',
         'created_at',
         'updated_at'
@@ -63,5 +64,13 @@ class Student extends Model
             return $query->where('birthday', '<=', $to_date);
         }
         return $query;
+    }
+
+    //img default
+    public function getImage(){
+        if ($this->image){
+            return $this->image;
+        }
+        return 'uploads/img_default.png';
     }
 }

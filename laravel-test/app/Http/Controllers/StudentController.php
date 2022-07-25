@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+    private $_GRID_URL = "/admin/students-list";
+
     public function listStudents(Request $request) {
 /*
         //Classes::query()->getQuery()->from: lấy ra bảng table
@@ -19,7 +21,6 @@ class StudentController extends Controller
             ->SELECT($studentTable.'.*', $classTable.'.className as className', $classTable.'.classRoom')
             ->simplePaginate(6); //get all array, phân trang
 */
-
         $paramName = $request->get('name'); //name input search
         $paramclassID = $request->get('classID'); //name combobox
         $paramBirthStart = $request->get('birth_start');
@@ -44,6 +45,7 @@ class StudentController extends Controller
         ]);
     }
 
+    //form-create
     public function studentForm(){
         $classesList = Classes::all();
         return view('pages.forms.student-forms.student-create', [
@@ -51,17 +53,101 @@ class StudentController extends Controller
         ]);
     }
 
+    //post-create
     protected function studentCreate(Request $request){
-//        dd($request->all());
+        //validate phía backend (có thể validate string|unique:student)
+        $request->validate([
+            'studentID'=>'required|string|unique:student',
+//            'image'=>'image|mines:jpeg,png,jpg,gif' //validate backend
+        ], [
+//            'required'=>'vui lòng nhập đầy đủ thông tin'  //required all input
+//            'mines'=>'vui lòng nhập đúng định dạng'
+        ]);
+
+        //upload file image
+        $image = null;
+        if ($request->hasFile('image')){
+            $file = $request->file('image');
+            $path = "uploads/";
+            $fileName = time().rand(0,9).$file->getClientOriginalName();    //tránh upload 2 ảnh cùng tên
+            $file->move($path,$fileName);
+            $image = $path.$fileName;   //link file
+        }
+
+        //dd($request->all());
         Student::create(
             [
                 'studentID'=>$request->get('studentID'),    //name input
                 'studentName'=>$request->get('studentName'),
                 'birthday'=>$request->get('birthday'),
+                'image'=>$image,
                 'classID'=>$request->get('classID')
             ]
         );
-//        die('done');
-        return redirect()->to('/students-list');    //điều hướng về list
+        //die('done');
+        return redirect()->to($this->_GRID_URL);    //điều hướng về list
     }
+
+    //form-edit
+    public function studentEdit($id){
+        $classesList = Classes::all();
+
+        $student = Student::find($id); //1 obj Student with id
+
+//        dd($student);
+
+        return view('pages.forms.student-forms.student-edit', [
+            'student'=>$student,
+            'classesList'=>$classesList
+        ]);
+    }
+
+    /* cách1: truyền vào id
+     * public function studentUpdate(Request $request, Student $student){
+        $student = Student::find($id); //tim cac sv trong database (truyen id)
+
+        $student->update(
+            [
+                'studentName'=>$request->get('studentName'),
+                'birthday'=>$request->get('birthday'),
+                'classID'=>$request->get('classID')
+            ]
+        );
+        return redirect()->to($this->_GRID_URL);    //điều hướng về list
+    }*/
+
+
+    //update(truyen vao 1 object)
+    public function studentUpdate(Request $request, Student $student){
+        //upload file image
+        $image = $student->image;   //get image
+        if ($request->hasFile('image')){
+            $file = $request->file('image');
+            $path = "uploads/";
+            $fileName = time().rand(0,9).$file->getClientOriginalName();    //tránh upload 2 ảnh cùng tên
+            $file->move($path,$fileName);
+            $image = $path.$fileName;   //link file
+        }
+
+        $student->update(
+            [
+                'studentName'=>$request->get('studentName'),
+                'birthday'=>$request->get('birthday'),
+                'image'=>$image,
+                'classID'=>$request->get('classID')
+            ]
+        );
+        return redirect()->to($this->_GRID_URL)->with("success", "Update student successfully");    //điều hướng về list->alert
+    }
+
+    //delete
+    public function studentDelete(Student $student){
+        try {
+            $student->delete(); //xoá cứng, thẳng vào database
+            return redirect()->to($this->_GRID_URL)->with("success", "Delete student successfully");    //điều hướng về list->alert
+        } catch (\Exception $e){
+            return redirect()->to($this->_GRID_URL)->with("error", "Delete Failed");
+        }
+    }
+
 }

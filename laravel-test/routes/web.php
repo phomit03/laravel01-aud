@@ -1,11 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\WebController;
-use App\Http\Controllers\ClassesController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\ScoresController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,36 +14,21 @@ use App\Http\Controllers\ScoresController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//route login/register
+Auth::routes();
+
+//prefix (them tien to cho url): admin/student-list
+//middleware("auth"): yeu cau dang nhap moi vao duoc trang chu
+//middleware("isAdmin"): phan quyen, co tk admin moi co quyen truy cap admin
+
+Route::middleware(["auth","isAdmin"])->prefix("admin")->group(function (){
+    include_once "admin.php";
 });
 
-//home
-Route::get('/about', [WebController::class, 'aboutUs']); //about la link dan sau url
+Route::middleware(["auth"])->group(function (){
+    include_once "user.php";
+});
 
-//routing form
-Route::get('/classes-create', [ClassesController::class, 'classesForm']);   //hiển thị giao diện
-Route::post('/classes-create', [ClassesController::class, 'classesCreate']);    //post dữ liệu từ input
-
-Route::get('/student-create', [StudentController::class, 'studentForm']);
-Route::post('/student-create', [StudentController::class, 'studentCreate']);
-
-Route::get('/subject-create', [SubjectController::class, 'subjectForm']);
-Route::post('/subject-create', [SubjectController::class, 'subjectCreate']);
-
-Route::get('/score-create', [ScoresController::class, 'scoreForm']);
-Route::post('/score-create', [ScoresController::class, 'scoreCreate']);
-
-
-Route::get('/classes-edit', [WebController::class, 'classesEdit']);
-Route::get('/student-edit', [WebController::class, 'studentEdit']);
-Route::get('/subject-edit', [WebController::class, 'subjectEdit']);
-Route::get('/score-edit', [WebController::class, 'scoreEdit']);
-
-//routing tables
-Route::get('/classes-list', [ClassesController::class, 'listClasses']);
-Route::get('/students-list', [StudentController::class, 'listStudents']);
-Route::get('/subjects-list', [SubjectController::class, 'listSubjects']);
-Route::get('/scores-list', [ScoresController::class, 'listScores']);
-
+//log_out
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

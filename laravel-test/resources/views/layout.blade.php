@@ -78,6 +78,22 @@
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">
+                    {{--alert--}}
+                    @if(session()->has("success"))
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                            {{session("success")}}
+                        </div>
+                    @endif
+                    @if(session()->has("error"))
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                            {{session("error")}}
+                        </div>
+                    @endif
+
                     @yield('content-header')
                 </div><!-- /.container-fluid -->
             </div>
