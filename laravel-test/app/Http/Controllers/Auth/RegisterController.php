@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::HOME; //click vao duong dan de doi sau khi register cua admin (do bi phan quyen)
 
     /**
      * Create a new controller instance.

@@ -26,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME; //HOME la trang chu, click vao de thay doi duong dan
+    protected $redirectTo = RouteServiceProvider::HOME; //HOME la trang chu, click vao de thay doi duong dan sau khi login
 
     /**
      * Create a new controller instance.
